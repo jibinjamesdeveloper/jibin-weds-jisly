@@ -1,0 +1,41 @@
+{
+  "name": "jibin-weds-jisly",
+  "version": "1.0.0",
+  "description": "A luxurious, animated wedding website for Jibin & Jisly",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve .",
+    "build": "echo 'Static site - no build required'",
+    "deploy": "echo 'Deploy to your preferred hosting service'",
+    "test": "echo 'Open index.html in a browser to test'",
+    "lighthouse": "npx lighthouse http://localhost:3000 --output html --output-path ./lighthouse-report.html"
+  },
+  "keywords": [
+    "wedding",
+    "website",
+    "luxury",
+    "responsive",
+    "animation",
+    "single-page"
+  ],
+  "author": "Jibin James",
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "serve": "^14.2.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/jibin-weds-jisly.git"
+  },
+  "homepage": "https://jibin-weds-jisly.com",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
