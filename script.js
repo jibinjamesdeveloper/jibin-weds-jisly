@@ -63,8 +63,8 @@ function initializeCursor() {
     }
 }
 
-// Countdown Timer
-function initializeCountdown() {
+//*/ Countdown Timer
+/*function initializeCountdown() {
     const weddingDate = new Date('November 24, 2025 10:30:00').getTime();
     
     function updateCountdown() {
@@ -92,6 +92,46 @@ function initializeCountdown() {
     updateCountdown();
     setInterval(updateCountdown, 1000);
 }
+*/
+
+
+
+
+function initializeCountdown() {
+    // 🕒 Wedding time in IST (UTC +5:30)
+    const weddingDateIST = new Date('2025-11-24T11:00:00+05:30').getTime();
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = weddingDateIST - now;
+
+        if (distance < 0) {
+            document.getElementById('countdown').innerHTML = `
+                <div class="countdown-item">
+                    <span class="countdown-number">🎉</span>
+                    <span class="countdown-label">Today!</span>
+                </div>`;
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById('days').textContent = days.toString().padStart(2, '0');
+        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+}
+
+document.addEventListener('DOMContentLoaded', initializeCountdown);
+
+
 
 // Smooth Scrolling
 function initializeSmoothScrolling() {
@@ -298,48 +338,65 @@ function initializeQuotesCarousel() {
 
 // Add to Calendar
 function initializeAddToCalendar() {
-    const addToCalendarBtn = document.getElementById('addToCalendar');
-    
-    if (!addToCalendarBtn) return;
-    
-    addToCalendarBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        
-        // Create ICS file content
-        const icsContent = [
-            'BEGIN:VCALENDAR',
-            'VERSION:2.0',
-            'PRODID:-//Jibin & Jisly Wedding//EN',
-            'CALSCALE:GREGORIAN',
-            'METHOD:PUBLISH',
-            'BEGIN:VEVENT',
-            'UID:jibin-jisly-wedding-2025',
-            'DTSTART:20251124T103000Z',
-            'DTEND:20251124T143000Z',
-            'SUMMARY:Jibin & Jisly Wedding',
-            'DESCRIPTION:Join us in celebrating the wedding of Jibin & Jisly. Wedding Mass at 10:30 AM, Reception at 12:00 PM.',
-            'LOCATION:St. Mary\'s Church and Parish Hall',
-            'STATUS:CONFIRMED',
-            'SEQUENCE:0',
-            'BEGIN:VALARM',
-            'TRIGGER:-PT1H',
-            'DESCRIPTION:Wedding starts in 1 hour',
-            'ACTION:DISPLAY',
-            'END:VALARM',
-            'END:VEVENT',
-            'END:VCALENDAR'
-        ].join('\r\n');
-        
-        // Create and download file
-        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'jibin-jisly-wedding.ics';
-        link.click();
-        window.URL.revokeObjectURL(url);
-    });
+  const addToCalendarBtn = document.getElementById('addToCalendar');
+  if (!addToCalendarBtn) return;
+
+  addToCalendarBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const icsContent = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Jibin & Jisly Wedding//EN',
+      'CALSCALE:GREGORIAN',
+
+      // --- Timezone Definition (Asia/Kolkata) ---
+      'BEGIN:VTIMEZONE',
+      'TZID:Asia/Kolkata',
+      'X-LIC-LOCATION:Asia/Kolkata',
+      'BEGIN:STANDARD',
+      'TZOFFSETFROM:+0530',
+      'TZOFFSETTO:+0530',
+      'TZNAME:IST',
+      'DTSTART:19700101T000000',
+      'END:STANDARD',
+      'END:VTIMEZONE',
+
+      // --- Event ---
+      'BEGIN:VEVENT',
+      'UID:jibin-jisly-wedding-2025',
+      'DTSTART;TZID=Asia/Kolkata:20251124T110000',
+      'DTEND;TZID=Asia/Kolkata:20251124T150000',
+      'SUMMARY:Jibin & Jisly Wedding',
+      'DESCRIPTION:Join us in celebrating the wedding of Jibin & Jisly. Wedding Mass at 11:00 AM, Reception at 12:00 PM.',
+      'LOCATION:St. Mary\'s Church and Parish Hall',
+      'STATUS:CONFIRMED',
+      'SEQUENCE:0',
+      'BEGIN:VALARM',
+      'TRIGGER:-PT1H',
+      'DESCRIPTION:Wedding starts in 1 hour',
+      'ACTION:DISPLAY',
+      'END:VALARM',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'jibin-jisly-wedding.ics';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  });
 }
+
+document.addEventListener('DOMContentLoaded', initializeAddToCalendar);
+
+
 
 // Intersection Observer for Animations
 function initializeIntersectionObserver() {
