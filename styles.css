@@ -123,6 +123,7 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
+    width: 100%;
 }
 
 /* Navigation */
@@ -144,6 +145,7 @@ h1, h2, h3, h4, h5, h6 {
     padding: 1rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
+    width: 100%;
 }
 
 .nav-logo a {
@@ -565,10 +567,44 @@ section.visible {
     height: 300px;
     object-fit: cover;
     transition: all 0.3s ease;
+    display: block;
 }
 
 .gallery-item:hover img {
     filter: brightness(1.1);
+}
+
+/* Loading placeholder for gallery images */
+.gallery-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-item.loading::before {
+    opacity: 1;
+}
+
+.gallery-item img.loaded {
+    opacity: 1;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
 }
 
 /* Lightbox */
@@ -770,6 +806,61 @@ section.visible {
 }
 
 /* Responsive Design */
+
+/* Large Tablets and Small Desktops (1024px - 1200px) */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 1000px;
+        padding: 0 1.5rem;
+    }
+    
+    .events-grid {
+        gap: 2rem;
+    }
+    
+    .gallery-grid {
+        gap: 1.5rem;
+    }
+}
+
+/* Tablets (768px - 1024px) */
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 1.5rem;
+    }
+    
+    .section-title {
+        font-size: clamp(2rem, 5vw, 3rem);
+        margin-bottom: 2.5rem;
+    }
+    
+    .events-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .event-card {
+        padding: 2.5rem 2rem;
+    }
+    
+    .story-paragraph {
+        font-size: 1.1rem;
+        padding: 0 1rem;
+    }
+    
+    .blessings-text {
+        font-size: 1.2rem;
+        padding: 0 1rem;
+    }
+    
+    .nav-container {
+        padding: 1rem 1.5rem;
+    }
+}
+
+/* Mobile and Small Tablets (481px - 768px) */
 @media (max-width: 768px) {
     .nav-links {
         display: none;
@@ -779,40 +870,166 @@ section.visible {
         display: flex;
     }
     
+    .nav-container {
+        padding: 1rem;
+    }
+    
+    .nav-logo a {
+        font-size: 1.3rem;
+    }
+    
+    .container {
+        padding: 0 1rem;
+    }
+    
+    section {
+        padding: 4rem 0;
+    }
+    
+    .section-title {
+        font-size: clamp(1.8rem, 6vw, 2.5rem);
+        margin-bottom: 2rem;
+        padding-bottom: 0.8rem;
+    }
+    
+    .section-title::after {
+        width: 60px;
+    }
+    
+    .hero {
+        height: 100vh;
+        min-height: 600px;
+    }
+    
+    .hero-content {
+        padding: 1.5rem;
+    }
+    
+    .hero-title {
+        margin-bottom: 2rem;
+    }
+    
+    .hero-name {
+        font-size: clamp(2.5rem, 10vw, 4rem);
+        margin-bottom: 0.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: clamp(1.2rem, 5vw, 1.8rem);
+        margin-bottom: 0.8rem;
+    }
+    
+    .hero-date {
+        font-size: clamp(1rem, 4vw, 1.4rem);
+    }
+    
     .countdown {
         flex-wrap: wrap;
-        gap: 1rem;
+        gap: 0.8rem;
+        margin-bottom: 2rem;
     }
     
     .countdown-item {
         padding: 1rem;
+        flex: 1 1 calc(50% - 0.4rem);
+        min-width: 120px;
     }
     
     .countdown-number {
         font-size: 2rem;
     }
     
+    .countdown-label {
+        font-size: 0.75rem;
+    }
+    
     .hero-buttons {
         flex-direction: column;
         align-items: center;
+        gap: 1rem;
+        width: 100%;
     }
     
     .btn {
         width: 100%;
-        max-width: 300px;
+        max-width: 280px;
         justify-content: center;
+        padding: 0.9rem 1.5rem;
+        font-size: 0.95rem;
     }
     
     .events-grid {
         grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .event-card {
+        padding: 2rem 1.5rem;
+    }
+    
+    .event-icon {
+        font-size: 2.5rem;
+    }
+    
+    .event-title {
+        font-size: 1.6rem;
+    }
+    
+    .event-time {
+        font-size: 1.1rem;
+    }
+    
+    .event-location {
+        font-size: 0.95rem;
     }
     
     .gallery-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .gallery-item img {
+        height: 250px;
+    }
+    
+    .story-paragraph {
+        font-size: 1rem;
+        line-height: 1.8;
+        margin-bottom: 2rem;
+        padding: 0;
+    }
+    
+    .blessings-text {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+        padding: 0;
+    }
+    
+    .quote-item blockquote {
+        font-size: 1.2rem;
+        padding: 0 1rem;
+    }
+    
+    .quote-item cite {
+        font-size: 0.9rem;
     }
     
     .lightbox-nav {
         display: none;
+    }
+    
+    .lightbox-close {
+        top: 10px;
+        right: 10px;
+        font-size: 1.8rem;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .lightbox-content {
+        max-width: 95%;
+        max-height: 85%;
     }
     
     .scroll-top {
@@ -820,24 +1037,90 @@ section.visible {
         right: 1.5rem;
         width: 45px;
         height: 45px;
+        font-size: 1.2rem;
+    }
+    
+    .footer {
+        padding: 2rem 0;
+    }
+    
+    .footer-text {
+        font-size: 1.1rem;
+    }
+    
+    .footer-credit {
+        font-size: 0.9rem;
+    }
+    
+    .footer-copyright {
+        font-size: 0.85rem;
     }
 }
 
+/* Small Mobile Devices (320px - 480px) */
 @media (max-width: 480px) {
     .container {
         padding: 0 1rem;
+    }
+    
+    .nav-container {
+        padding: 0.8rem 1rem;
+    }
+    
+    .nav-logo a {
+        font-size: 1.2rem;
+    }
+    
+    section {
+        padding: 3rem 0;
+    }
+    
+    .section-title {
+        font-size: clamp(1.5rem, 7vw, 2rem);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.6rem;
+    }
+    
+    .section-title::after {
+        width: 50px;
+    }
+    
+    .hero {
+        min-height: 500px;
     }
     
     .hero-content {
         padding: 1rem;
     }
     
+    .hero-title {
+        margin-bottom: 1.5rem;
+    }
+    
+    .hero-name {
+        font-size: clamp(2rem, 12vw, 3rem);
+        margin-bottom: 0.6rem;
+        letter-spacing: 0.01em;
+    }
+    
+    .hero-subtitle {
+        font-size: clamp(1rem, 6vw, 1.4rem);
+        margin-bottom: 0.6rem;
+    }
+    
+    .hero-date {
+        font-size: clamp(0.9rem, 5vw, 1.2rem);
+    }
+    
     .countdown {
         gap: 0.5rem;
+        margin-bottom: 1.5rem;
     }
     
     .countdown-item {
-        padding: 0.8rem;
+        padding: 0.8rem 0.6rem;
+        flex: 1 1 calc(50% - 0.25rem);
+        min-width: 100px;
     }
     
     .countdown-number {
@@ -845,7 +1128,178 @@ section.visible {
     }
     
     .countdown-label {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
+    }
+    
+    .btn {
+        max-width: 100%;
+        padding: 0.85rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    
+    .event-card {
+        padding: 1.5rem 1rem;
+        border-radius: 15px;
+    }
+    
+    .event-icon {
+        font-size: 2rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .event-title {
+        font-size: 1.4rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .event-time {
+        font-size: 1rem;
+    }
+    
+    .event-location {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .gallery-item img {
+        height: 220px;
+    }
+    
+    .story-paragraph {
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.7;
+    }
+    
+    .blessings-text {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.7;
+    }
+    
+    .quote-item {
+        padding: 1.5rem 1rem;
+    }
+    
+    .quote-item blockquote {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    
+    .quote-item cite {
+        font-size: 0.85rem;
+    }
+    
+    .scroll-top {
+        bottom: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .loader-name {
+        font-size: 2rem;
+        letter-spacing: 0.3rem;
+    }
+    
+    .loader-spinner {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Extra Small Devices (max-width: 320px) */
+@media (max-width: 320px) {
+    .countdown-item {
+        padding: 0.7rem 0.5rem;
+    }
+    
+    .countdown-number {
+        font-size: 1.3rem;
+    }
+    
+    .countdown-label {
+        font-size: 0.65rem;
+    }
+    
+    .hero-name {
+        font-size: 1.8rem;
+    }
+    
+    .section-title {
+        font-size: 1.4rem;
+    }
+    
+    .btn {
+        padding: 0.75rem 1rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Landscape Orientation (Mobile) */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        min-height: 100vh;
+    }
+    
+    .hero-content {
+        padding: 1rem;
+    }
+    
+    .hero-name {
+        font-size: clamp(2rem, 8vw, 3rem);
+    }
+    
+    .countdown {
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .countdown-item {
+        padding: 0.8rem 0.5rem;
+    }
+    
+    .countdown-number {
+        font-size: 1.8rem;
+    }
+    
+    section {
+        padding: 3rem 0;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    .btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .nav-link {
+        padding: 0.8rem 0;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .gallery-item {
+        touch-action: manipulation;
+    }
+    
+    .event-card:hover {
+        transform: none;
+    }
+    
+    .gallery-item:hover {
+        transform: none;
+    }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .gallery-item img {
+        image-rendering: -webkit-optimize-contrast;
     }
 }
 

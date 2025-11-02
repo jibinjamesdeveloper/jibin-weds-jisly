@@ -157,18 +157,18 @@ function initializeGallery() {
     
     // Sample gallery images (replace with actual images)
     const galleryImages = [
-        '/public/gallery/1.jpg',
-        '/public/gallery/2.jpg',
-        '/public/gallery/3.jpg',
-        '/public/gallery/4.jpg',
-        '/public/gallery/5.jpg',
-        '/public/gallery/6.jpg',
-        '/public/gallery/7.jpg',
-        '/public/gallery/8.jpg',
-        '/public/gallery/9.jpg',
-        '/public/gallery/10.jpg',
-        '/public/gallery/11.jpg',
-        '/public/gallery/12.jpg'
+        'public/gallery/1.jpg',
+        'public/gallery/2.jpg',
+        'public/gallery/3.jpg',
+        'public/gallery/4.jpg',
+        'public/gallery/5.jpg',
+        'public/gallery/6.jpg',
+        'public/gallery/7.jpg',
+        'public/gallery/8.jpg',
+        'public/gallery/9.jpg',
+        'public/gallery/10.jpg',
+        'public/gallery/11.jpg',
+        'public/gallery/12.jpg'
     ];
     
     let currentImageIndex = 0;
@@ -180,14 +180,34 @@ function initializeGallery() {
         galleryItem.setAttribute('data-index', index);
         
         const img = document.createElement('img');
-        img.src = imageSrc;
         img.alt = `Wedding Photo ${index + 1}`;
         img.loading = 'lazy';
+        img.decoding = 'async';
+        img.style.opacity = '0';
+        img.style.transition = 'opacity 0.3s ease';
         
-        // Fallback for missing images
-        img.onerror = function() {
-            this.src = `https://via.placeholder.com/400x300/333/666?text=Photo+${index + 1}`;
+        // Add loading state
+        galleryItem.classList.add('loading');
+        galleryItem.style.background = 'rgba(255, 255, 255, 0.05)';
+        galleryItem.style.minHeight = '300px';
+        
+        // Load image with error handling
+        const imageLoader = new Image();
+        imageLoader.onload = function() {
+            img.src = imageSrc;
+            img.classList.add('loaded');
+            img.style.opacity = '1';
+            galleryItem.classList.remove('loading');
+            galleryItem.style.background = 'transparent';
         };
+        imageLoader.onerror = function() {
+            img.src = `https://via.placeholder.com/400x300/333/666?text=Photo+${index + 1}`;
+            img.classList.add('loaded');
+            img.style.opacity = '1';
+            galleryItem.classList.remove('loading');
+            galleryItem.style.background = 'transparent';
+        };
+        imageLoader.src = imageSrc;
         
         galleryItem.appendChild(img);
         galleryGrid.appendChild(galleryItem);
@@ -423,21 +443,56 @@ const mobileMenuCSS = `
     @media (max-width: 768px) {
         .nav-links {
             position: fixed;
-            top: 100%;
+            top: 70px;
             left: 0;
             width: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.98);
             backdrop-filter: blur(20px);
             flex-direction: column;
-            padding: 2rem;
-            transform: translateY(-100%);
+            padding: 2rem 1rem;
+            transform: translateX(-100%);
             opacity: 0;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            max-height: calc(100vh - 70px);
+            overflow-y: auto;
         }
         
         .nav-links.active {
-            transform: translateY(0);
+            transform: translateX(0);
             opacity: 1;
+        }
+        
+        .nav-links li {
+            width: 100%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-links li:last-child {
+            border-bottom: none;
+        }
+        
+        .nav-link {
+            display: block;
+            padding: 1rem;
+            width: 100%;
+            text-align: left;
+            font-size: 1.1rem;
+        }
+        
+        .nav-toggle {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 1001;
+        }
+        
+        .nav-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #ffffff;
+            transition: all 0.3s ease;
+            display: block;
         }
         
         .nav-toggle.active span:nth-child(1) {
@@ -450,6 +505,18 @@ const mobileMenuCSS = `
         
         .nav-toggle.active span:nth-child(3) {
             transform: rotate(-45deg) translate(7px, -6px);
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .nav-links {
+            top: 60px;
+            padding: 1.5rem 1rem;
+        }
+        
+        .nav-link {
+            padding: 0.9rem;
+            font-size: 1rem;
         }
     }
 `;
