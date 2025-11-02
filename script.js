@@ -337,64 +337,71 @@ function initializeQuotesCarousel() {
 }
 
 // Add to Calendar
-function initializeAddToCalendar() {
-  const addToCalendarBtn = document.getElementById('addToCalendar');
-  if (!addToCalendarBtn) return;
+const icsContent = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Jibin & Jisly Wedding//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+  
+    // Timezone definition
+    'BEGIN:VTIMEZONE',
+    'TZID:Asia/Kolkata',
+    'X-LIC-LOCATION:Asia/Kolkata',
+    'BEGIN:STANDARD',
+    'TZOFFSETFROM:+0530',
+    'TZOFFSETTO:+0530',
+    'TZNAME:IST',
+    'DTSTART:19700101T000000',
+    'END:STANDARD',
+    'END:VTIMEZONE',
+  
+    // Event
+    'BEGIN:VEVENT',
+    'UID:jibin-jisly-wedding-2025@yourdomain.com',
+    'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z',
+    'DTSTART;TZID=Asia/Kolkata:20251124T110000',
+    'DTEND;TZID=Asia/Kolkata:20251124T160000',
+    'SUMMARY:Jibin & Jisly Wedding',
+    'DESCRIPTION:Join us in celebrating the wedding of Jibin & Jisly.',
+    'LOCATION:St. Mary\'s Church and Parish Hall',
+    'STATUS:CONFIRMED',
+    'SEQUENCE:0',
+    'BEGIN:VALARM',
+    'TRIGGER:-PT1H',
+    'DESCRIPTION:Wedding starts in 1 hour',
+    'ACTION:DISPLAY',
+    'END:VALARM',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+  
 
-  addToCalendarBtn.addEventListener('click', (e) => {
-    e.preventDefault();
+  function initializeAddToCalendar() {
+    const btn = document.getElementById('addToCalendar');
+    if (!btn) return;
+  
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+  
+      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'jibin-jisly-wedding.ics';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  }
+  
+  document.addEventListener('DOMContentLoaded', initializeAddToCalendar);
+  
 
-    const icsContent = [
-      'BEGIN:VCALENDAR',
-      'VERSION:2.0',
-      'PRODID:-//Jibin & Jisly Wedding//EN',
-      'CALSCALE:GREGORIAN',
 
-      // --- Timezone Definition (Asia/Kolkata) ---
-      'BEGIN:VTIMEZONE',
-      'TZID:Asia/Kolkata',
-      'X-LIC-LOCATION:Asia/Kolkata',
-      'BEGIN:STANDARD',
-      'TZOFFSETFROM:+0530',
-      'TZOFFSETTO:+0530',
-      'TZNAME:IST',
-      'DTSTART:19700101T000000',
-      'END:STANDARD',
-      'END:VTIMEZONE',
 
-      // --- Event ---
-      'BEGIN:VEVENT',
-      'UID:jibin-jisly-wedding-2025',
-      'DTSTART;TZID=Asia/Kolkata:20251124T110000',
-      'DTEND;TZID=Asia/Kolkata:20251124T150000',
-      'SUMMARY:Jibin & Jisly Wedding',
-      'DESCRIPTION:Join us in celebrating the wedding of Jibin & Jisly. Wedding Mass at 11:00 AM, Reception at 12:00 PM.',
-      'LOCATION:St. Mary\'s Church and Parish Hall',
-      'STATUS:CONFIRMED',
-      'SEQUENCE:0',
-      'BEGIN:VALARM',
-      'TRIGGER:-PT1H',
-      'DESCRIPTION:Wedding starts in 1 hour',
-      'ACTION:DISPLAY',
-      'END:VALARM',
-      'END:VEVENT',
-      'END:VCALENDAR'
-    ].join('\r\n');
 
-    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'jibin-jisly-wedding.ics';
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  });
-}
-
-document.addEventListener('DOMContentLoaded', initializeAddToCalendar);
 
 
 
