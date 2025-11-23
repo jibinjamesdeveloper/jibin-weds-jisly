@@ -65,7 +65,7 @@ function initializeCursor() {
 
 // Countdown Timer
 function initializeCountdown() {
-    const weddingDate = new Date('November 24, 2025 10:30:00').getTime();
+    const weddingDate = new Date('November 24, 2025 11:00:00').getTime();
     
     function updateCountdown() {
         const now = new Date().getTime();
